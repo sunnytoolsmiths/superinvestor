@@ -58,7 +58,7 @@ for investor_url in investor_links:
                 percent_change_to_portfolio = percent_change_to_portfolio.text.strip()
             else:
                 percent_change_to_portfolio = '0'  # Default to '0' if percent_activity is empty
-                print(ticker, stock, percent_portfolio, shares, reported_price, percent_difference_current_price,current_price, value, percent_activity, percent_change_to_portfolio)
-            print(f'Pge {i} done')
+            print(ticker, stock, percent_portfolio, shares, reported_price, percent_difference_current_price,current_price, value, percent_activity, percent_change_to_portfolio)
+        print(f'Pge {i} done')
 
         i += 1
