@@ -3,7 +3,6 @@ This product is part of the Freedom Project and aims to assist everyday individu
 
 This tool is designed to help users become successful, disciplined stock investors by making the relavent data easily accessible. 
 
-##Feature List
+## Feature List
 - [ ] User can download the CSV about all the super investor's portfolio change data since 2019Q3 
 - [ ] User can apply BI tool to analyze the data 
-- [ ] 
