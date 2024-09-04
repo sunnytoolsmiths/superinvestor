@@ -17,7 +17,7 @@ print(f"Found {len(investor_links)} investor links.")
 for link in investor_links:
     print(link)
 
-investor_file = open('investor_file.csv','a')
+investor_file = open('investor_file.csv','w')
 investor_file.write('investor_name,investor_company,ticker,stock,percent_portfolio,shares,reported_price,percent_difference_current_price,current_price,value,percent_activity,percent_change_to_portfolio\n')
 
 
@@ -59,9 +59,17 @@ for investor_url in investor_links:
             ticker = row.find('div', class_ = 'guru_table_column scroll-fix text-center').text.strip()
             stock = row.find ('div', class_ = 'guru_table_column long_text_ellipsis').text.strip()
             percent_portfolio = row.find_all('div', class_ = 'guru_table_column text-center')[1].text.strip()
-            shares_and_reported_price = row.find_all('div', class_ ='guru_table_column')
-            shares = shares_and_reported_price[4].text.strip().replace(',', '')
-            reported_price = shares_and_reported_price[5].text.strip()
+            # shares_and_reported_price = row.find_all('div', class_ ='guru_table_column')
+            # shares = shares_and_reported_price[4].text.strip().replace(',', '')
+            # reported_price = shares_and_reported_price[5].text.strip()
+
+            shares_and_reported_price = row.find_all('div', class_='guru_table_column')
+            print(f'Debug Info: {shares_and_reported_price}')  # Debugging line to inspect what each index contains
+            shares_index = 4  # Adjust this index based on your actual HTML structure
+            shares = shares_and_reported_price[shares_index].text.strip().replace(',', '')
+            reported_price_index = 5  # Adjust this index based on your actual HTML structure
+            reported_price = shares_and_reported_price[reported_price_index].text.strip()
+
 
             percent_difference_current_price = row.find('span', class_='pl-1 pr-2')
             if percent_difference_current_price is None:
@@ -81,7 +89,7 @@ for investor_url in investor_links:
 
             percent_activity = row.find('span', class_='normal')
             if percent_activity:
-                percent_activity = percent_activity.text.strip()
+                percent_activity = percent_activity.text.strip().replace(',', '')
             else:
                 percent_activity = '0'  # Default to '0' if percent_activity is empty
 
