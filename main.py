@@ -18,7 +18,11 @@ for link in investor_links:
     print(link)
 
 investor_file = open('investor_file.csv','w')
-investor_file.write('investor_name,investor_company,ticker,stock,percent_portfolio,shares,reported_price,percent_difference_current_price,current_price,value,percent_activity,percent_change_to_portfolio\n')
+# investor_file.write('investor_name,investor_company,ticker,stock,percent_portfolio,shares,reported_price,percent_difference_current_price,current_price,value\n')
+# Updated write statement with double quotes around fields that may contain commas
+investor_file.write(
+    f'"name","company","ticker","stock","percent_portfolio","shares","reported_price","percent_difference_current_price","current_price","value"\n'
+)
 
 
 # step 2: Iterate over each investor's page
@@ -46,9 +50,9 @@ for investor_url in investor_links:
         breadcrumb = soup.find('div', class_='breadcrumb-content d-flex flex-column align-items-center text-center')
 
 
-        name = breadcrumb.find('h2', class_='tag-h2 text-white text-uppercase').text.strip()
+        name = breadcrumb.find('h2', class_='tag-h2 text-white text-uppercase').text.strip().replace(',', ' ')
         # Extract Berkshire Hathaway
-        company = breadcrumb.find('div', class_='tag-h4 text-white text-uppercase').text.strip()
+        company = breadcrumb.find('div', class_='tag-h4 text-white text-uppercase').text.strip().replace(',', ' ')
         print(f"{name}, {company}")
 
         table = soup.find('div',class_='guru_table_body')
@@ -68,7 +72,7 @@ for investor_url in investor_links:
             shares_index = 4  # Adjust this index based on your actual HTML structure
             shares = shares_and_reported_price[shares_index].text.strip().replace(',', '')
             reported_price_index = 5  # Adjust this index based on your actual HTML structure
-            reported_price = shares_and_reported_price[reported_price_index].text.strip()
+            reported_price = shares_and_reported_price[reported_price_index].text.strip().replace(',', '')
 
 
             percent_difference_current_price = row.find('span', class_='pl-1 pr-2')
@@ -82,29 +86,29 @@ for investor_url in investor_links:
             if not current_price:
                 current_price = '0'
             else:
-                current_price = current_price[-1].text
+                current_price = current_price[-1].text.replace(',', '')
 
-            value = shares_and_reported_price[7].text.strip()
-
-
-            percent_activity = row.find('span', class_='normal')
-            if percent_activity:
-                percent_activity = percent_activity.text.strip().replace(',', '')
-            else:
-                percent_activity = '0'  # Default to '0' if percent_activity is empty
+            value = shares_and_reported_price[7].text.strip().replace(',', '')
 
 
-            percent_change_to_portfolio = row.find('div', class_='guru_table_column is_change text-center activity_status_-1')
-            if percent_change_to_portfolio:
-                percent_change_to_portfolio = percent_change_to_portfolio.text.strip()
-            else:
-                percent_change_to_portfolio = '0'  # Default to '0' if percent_activity is empty
+            # percent_activity = row.find('span', class_='normal')
+            # if percent_activity:
+            #     percent_activity = percent_activity.text.strip().replace(',', '')
+            # else:
+            #     percent_activity = '0'  # Default to '0' if percent_activity is empty
+            #
+            #
+            # percent_change_to_portfolio = row.find('div', class_='guru_table_column is_change text-center activity_status_-1')
+            # if percent_change_to_portfolio:
+            #     percent_change_to_portfolio = percent_change_to_portfolio.text.strip()
+            # else:
+            #     percent_change_to_portfolio = '0'  # Default to '0' if percent_activity is empty
 
 
             print(ticker, stock, percent_portfolio, shares, reported_price, percent_difference_current_price,
-                  current_price, value, percent_activity, percent_change_to_portfolio)
+                  current_price, value)
             investor_file.write(
-                f'{name},{company},{ticker},{stock},{percent_portfolio},{shares},{reported_price},{percent_difference_current_price},{current_price},{value},{percent_activity},{percent_change_to_portfolio}\n')
+                f'{name},{company},{ticker},{stock},{percent_portfolio},{shares},{reported_price},{percent_difference_current_price},{current_price},{value}\n')
         print(f'Pge {i} done')
 
         i += 1
